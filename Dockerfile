@@ -8,15 +8,10 @@ WORKDIR /app
 COPY . /app
 
 # Install any dependencies specified in requirements.txt
-# If there are no dependencies, this line can be omitted
-RUN pip install flask
-RUN pip install flask-cors
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Make port 8080 available to the world outside this container
-EXPOSE 3000
+# Expose the port that your Flask app runs on
+EXPOSE 5000
 
-# Define environment variable
-ENV PYTHONUNBUFFERED=1
-
-# Run the simple Python HTTP server
-CMD ["python", "-m", "http.server", "8080"]
+# Run the Flask app with Gunicorn
+CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:5000", "app:app"]
